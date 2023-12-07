@@ -48,7 +48,7 @@ int main() {
   glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
   // glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 
-  GLFWwindow *window = glfwCreateWindow(800, 600, "Marching Cubes", NULL, NULL);
+  GLFWwindow *window = glfwCreateWindow(800, 600, "OpenGL Engine", NULL, NULL);
   if (window == NULL) {
     std::cout << "Failed to create GLFW window" << std::endl;
     glfwTerminate();
@@ -89,7 +89,11 @@ int main() {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
+    float timeValue = glfwGetTime();
+    float greenColor = (std::sin(timeValue) / 2.0f) + 0.5f;
+
     shader.Use();
+    shader.SetVec4f("ourColor", 0.0f, greenColor, 0.0f, 1.0f);
     glBindVertexArray(VAO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
