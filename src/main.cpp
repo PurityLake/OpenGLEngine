@@ -64,7 +64,7 @@ int main() {
   glViewport(0, 0, 800, 600);
   glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 
-  Shader shader { "assets/vert.glsl", "assets/frag.glsl" };
+  Shader shader{"assets/vert.glsl", "assets/frag.glsl"};
 
   unsigned int VAO;
   glGenVertexArrays(1, &VAO);
@@ -89,11 +89,7 @@ int main() {
     glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT);
 
-    float timeValue = glfwGetTime();
-    float greenColor = (std::sin(timeValue) / 2.0f) + 0.5f;
-
     shader.Use();
-    shader.SetVec4f("ourColor", 0.0f, greenColor, 0.0f, 1.0f);
     glBindVertexArray(VAO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
