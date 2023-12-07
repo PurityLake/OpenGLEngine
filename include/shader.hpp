@@ -3,19 +3,29 @@
 
 #include <glad/glad.h>
 
+#include <string>
+
 class Shader {
 public:
-  unsigned int ID;
-
   Shader(const char *vertexPath, const char *fragmentPath);
 
-  void use();
+  unsigned int GetID() const;
 
-  void setBool(const std::string &name, bool value) const;
-  void setInt(const std::string &name, int value) const;
-  void setFloat(const std::string &name int value) const;
+  bool IsValid() const;
+
+  void Use() const;
+
+  void SetBool(const std::string &name, bool value) const;
+  void SetBool(unsigned int location, bool value) const;
+  void SetInt(const std::string &name, int value) const;
+  void SetInt(unsigned int location, int value) const;
+  void SetFloat(const std::string &name, float value) const;
+  void SetFloat(unsigned int location, float value) const;
+
 
 private:
+  unsigned int m_ID;
+  bool m_Valid;
 };
 
 #endif

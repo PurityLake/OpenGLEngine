@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.28)
-project(March)
+project(OGLEngine)
 
 # Set the C++ standard to C++20
 set(CMAKE_CXX_STANDARD 20)
@@ -12,16 +12,16 @@ find_package(GLFW3 REQUIRED)
 find_package(OpenGL REQUIRED)
 
 # Add the executable
-add_executable(march)
+add_executable(oglengine)
 
 # Add all *.cpp files in the src directory to a variable
 file(GLOB_RECURSE SRC_FILES "src/*.c*")
 
 # Set the source files for the executable
-target_sources(march PRIVATE ${SRC_FILES})
+target_sources(oglengine PRIVATE ${SRC_FILES})
 
-target_include_directories(march PRIVATE "include" ${GLFW3_INCLUDE_DIR})
+target_include_directories(oglengine PRIVATE "include" ${GLFW3_INCLUDE_DIR})
 
 
 # Link against the GLFW library
-target_link_libraries(march PRIVATE ${GLFW3_LIBRARY} OpenGL::GL)
+target_link_libraries(oglengine PRIVATE ${GLFW3_LIBRARY} OpenGL::GL)
