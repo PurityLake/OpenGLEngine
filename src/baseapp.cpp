@@ -7,9 +7,6 @@ BaseApp::BaseApp()
 
 BaseApp::~BaseApp() { glfwTerminate(); }
 
-void BaseApp::OnStart() {}
-void BaseApp::OnUpdate(float dt) {}
-void BaseApp::OnRender() {}
 void BaseApp::OnResize(int width, int height) {}
 
 int BaseApp::Run() {

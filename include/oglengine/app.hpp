@@ -12,9 +12,9 @@ public:
 
   int Run();
   void Close();
-  virtual void OnStart();
-  virtual void OnUpdate(float dt);
-  virtual void OnRender();
+  virtual void OnStart() = 0;
+  virtual void OnUpdate(float dt) = 0;
+  virtual void OnRender() = 0;
   virtual void OnResize(int width, int height);
 
 private:
