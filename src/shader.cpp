@@ -21,6 +21,8 @@ Shader &Shader::operator=(Shader &&other) {
 
 unsigned int Shader::GetID() const { return m_ID; }
 
+bool Shader::IsValid() const { return m_ID != 0 && glIsProgram(m_ID); }
+
 void Shader::Use() const { glUseProgram(m_ID); }
 
 void Shader::SetBool(const std::string &name, bool value) const {

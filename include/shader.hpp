@@ -47,6 +47,8 @@ public:
 
   unsigned int GetID() const;
 
+  bool IsValid() const;
+
   void Use() const;
 
   void SetBool(const std::string &name, bool value) const;
