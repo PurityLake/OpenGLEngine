@@ -3,15 +3,41 @@
 
 #include <glad/glad.h>
 
+#include <optional>
 #include <string>
+#include <vector>
+
+#define UNWRAP_SHADER(shaderName, shaderOpt, errorCode)                        \
+  if (!((shaderOpt).has_value())) {                                            \
+    errorCode;                                                                 \
+  }                                                                            \
+  shader = (shaderOpt).value();
+
+class Shader;
+
+class ShaderBuilder {
+public:
+  ShaderBuilder();
+
+  ShaderBuilder &AddShader(GLenum type, const char *path);
+  ShaderBuilder &AddShader(GLenum type, std::string &path);
+
+  std::optional<Shader> Build();
+
+private:
+  struct ShaderEntry {
+    GLenum type;
+    std::string path;
+  };
+  std::vector<ShaderEntry> m_ShaderEntries;
+};
 
 class Shader {
 public:
-  Shader(const char *vertexPath, const char *fragmentPath);
+  Shader();
+  Shader(unsigned int programID);
 
   unsigned int GetID() const;
-
-  bool IsValid() const;
 
   void Use() const;
 
@@ -29,7 +55,6 @@ public:
 
 private:
   unsigned int m_ID;
-  bool m_Valid;
 };
 
 #endif // __SHADER_HPP__
