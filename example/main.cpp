@@ -1,10 +1,16 @@
 #include "glad/glad.h"
+#include "shader.hpp"
+#define STB_IMAGE_IMPLEMENTATION
+#include "stb_image.h"
 
 #include <GLFW/glfw3.h>
+<<<<<<< HEAD
 #include <oglengine/app.hpp>
 #include <oglengine/shader.hpp>
 #define STB_IMAGE_IMPLEMENTATION
 #include <oglengine/stb_image.h>
+=======
+>>>>>>> parent of 990f8ef (Add OglEngine folder)
 
 #include <iostream>
 

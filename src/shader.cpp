@@ -1,4 +1,4 @@
-#include "oglengine/shader.hpp"
+#include "shader.hpp"
 
 #include <iostream>
 
