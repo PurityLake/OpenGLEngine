@@ -38,6 +38,12 @@ class Shader {
 public:
   Shader();
   Shader(unsigned int programID);
+  Shader(const Shader &other);
+  Shader(Shader &&other);
+  ~Shader();
+
+  Shader &operator=(const Shader &other);
+  Shader &operator=(Shader &&other);
 
   unsigned int GetID() const;
 

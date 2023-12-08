@@ -56,6 +56,7 @@ int main() {
   builder.AddShader(GL_VERTEX_SHADER, "assets/vert.glsl")
       .AddShader(GL_FRAGMENT_SHADER, "assets/frag.glsl");
   UNWRAP_SHADER(shader, builder.Build(), goto error);
+  builder.Clear();
 
   unsigned int VAO;
   glGenVertexArrays(1, &VAO);
