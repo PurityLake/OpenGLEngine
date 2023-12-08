@@ -24,6 +24,8 @@ public:
 
   std::optional<Shader> Build();
 
+  void Clear();
+
 private:
   struct ShaderEntry {
     GLenum type;

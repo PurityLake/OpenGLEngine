@@ -78,3 +78,5 @@ std::optional<Shader> ShaderBuilder::Build() {
 
   return std::optional<Shader>(Shader(id));
 }
+
+void ShaderBuilder::Clear() { m_ShaderEntries.clear(); }
