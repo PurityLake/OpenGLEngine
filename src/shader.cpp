@@ -2,15 +2,12 @@
 
 #include <iostream>
 
-Shader::Shader() : m_ID(-1) {}
+Shader::Shader() : m_ID(0) {}
 Shader::Shader(unsigned int programID) : m_ID(programID) {}
 Shader::Shader(const Shader &other) : m_ID(other.m_ID) {}
-Shader::Shader(Shader &&other) : m_ID(other.m_ID) { other.m_ID = -1; }
+Shader::Shader(Shader &&other) : m_ID(other.m_ID) { other.m_ID = 0; }
 
-Shader::~Shader() {
-  glDeleteProgram(m_ID);
-  std::cout << "Shader deleted " << m_ID << std::endl;
-}
+Shader::~Shader() { glDeleteProgram(m_ID); }
 
 Shader &Shader::operator=(const Shader &other) {
   m_ID = other.m_ID;
@@ -18,7 +15,7 @@ Shader &Shader::operator=(const Shader &other) {
 }
 Shader &Shader::operator=(Shader &&other) {
   m_ID = other.m_ID;
-  other.m_ID = -1;
+  other.m_ID = 0;
   return *this;
 }
 
