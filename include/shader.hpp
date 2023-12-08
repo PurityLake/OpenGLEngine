@@ -1,5 +1,5 @@
-#ifndef __SHADER_H__
-#define __SHADER_H__
+#ifndef __SHADER_HPP__
+#define __SHADER_HPP__
 
 #include <glad/glad.h>
 
@@ -21,13 +21,15 @@ public:
   void SetInt(unsigned int location, int value) const;
   void SetFloat(const std::string &name, float value) const;
   void SetFloat(unsigned int location, float value) const;
-  
-  void SetVec4f(const std::string &name, float x, float y, float z, float w) const;
-  void SetVec4f(unsigned int location, float x, float y, float z, float w) const;
+
+  void SetVec4f(const std::string &name, float x, float y, float z,
+                float w) const;
+  void SetVec4f(unsigned int location, float x, float y, float z,
+                float w) const;
 
 private:
   unsigned int m_ID;
   bool m_Valid;
 };
 
-#endif
+#endif // __SHADER_HPP__
