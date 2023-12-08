@@ -1,4 +1,4 @@
-#include "oglengine/baseapp.hpp"
+#include "oglengine/app.hpp"
 
 #include <iostream>
 
@@ -16,15 +16,22 @@ int BaseApp::Run() {
   m_LastTime = glfwGetTime();
   int ret = Init();
   if (ret == 0) {
-    while (m_Running) {
+    while (!glfwWindowShouldClose(m_Window)) {
       Update();
+      glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+      glClear(GL_COLOR_BUFFER_BIT);
       Render();
+      glfwSwapBuffers(m_Window);
+      glfwPollEvents();
     }
   }
   return ret;
 }
 
-void BaseApp::Close() { m_Running = false; }
+void BaseApp::Close() {
+  m_Running = false;
+  glfwSetWindowShouldClose(m_Window, true);
+}
 
 int BaseApp::Init() {
   glfwInit();
@@ -56,6 +63,8 @@ int BaseApp::Init() {
         BaseApp *app = static_cast<BaseApp *>(glfwGetWindowUserPointer(w));
         app->Resize(w, width, height);
       });
+
+  OnStart();
 
   return 0;
 }
