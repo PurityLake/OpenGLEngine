@@ -49,6 +49,7 @@ public:
 
   bool IsValid() const;
 
+  void Delete();
   void Use() const;
 
   void SetBool(const std::string &name, bool value) const;
