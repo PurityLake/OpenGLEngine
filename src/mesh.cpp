@@ -3,8 +3,9 @@
 #include <glad/glad.h>
 
 Mesh::Mesh(std::vector<Vertex> &&vertices, std::vector<unsigned int> &&indices,
-           std::vector<Texture> &&textures)
-    : m_Vertices(vertices), m_Indices(indices), m_Textures(textures) {
+           std::vector<Texture> &&textures, glm::mat4 &trans)
+    : m_Vertices(vertices), m_Indices(indices), m_Textures(textures),
+      m_Tranform(trans) {
   Setup();
 }
 
