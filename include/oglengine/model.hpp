@@ -29,9 +29,10 @@ public:
   std::vector<Vertex> m_Vertices;
   std::vector<unsigned int> m_Indices;
   std::vector<Texture> m_Textures;
+  glm::mat4 m_Tranform;
 
   Mesh(std::vector<Vertex> &&vertices, std::vector<unsigned int> &&indices,
-       std::vector<Texture> &&textures);
+       std::vector<Texture> &&textures, glm::mat4 &trans);
 
   unsigned int m_VAO, m_VBO, m_EBO;
 
@@ -44,8 +45,6 @@ public:
   std::vector<Mesh> m_Meshes;
   Shader m_Shader;
 
-  glm::mat3 m_ModelMat;
-
   Model(const char *path, Shader &shader);
   Model(const Model &other);
   Model(Model &&other);
@@ -57,8 +56,10 @@ private:
 
   void LoadModel(const std::string &path);
   void ProcessModel(aiNode *node, const aiScene *scene);
-  Mesh ProcessMesh(aiMesh *mesh, const aiScene *scene);
-  std::vector<Texture> LoadMaterialTextures(aiMaterial *mat, aiTextureType type,
+  void ProcessModel(aiNode *node, const aiScene *scene, glm::mat4 &trans);
+  Mesh ProcessMesh(aiMesh *mesh, const aiScene *scene, glm::mat4 &trans);
+  std::vector<Texture> LoadMaterialTextures(const aiScene *scene,
+                                            aiMaterial *mat, aiTextureType type,
                                             std::string typeName);
 };
 

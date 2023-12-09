@@ -7,8 +7,8 @@
 
 #include <iostream>
 
-unsigned int TextureFromFile(const char *path, const std::string &directory,
-                             bool gamma) {
+unsigned int TextureFromFile(unsigned int *id, const char *path,
+                             const std::string &directory, bool gamma) {
   std::string filename = std::string(path);
   filename = directory + '/' + filename;
 
@@ -38,13 +38,14 @@ unsigned int TextureFromFile(const char *path, const std::string &directory,
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
                     GL_LINEAR_MIPMAP_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+    *id = textureID;
     stbi_image_free(data);
   } else {
     std::cout << "Texture failed to load at path: " << path << std::endl;
     stbi_image_free(data);
+    glDeleteTextures(1, &textureID);
+    return 0;
   }
-
   return textureID;
 }
 
@@ -84,16 +85,40 @@ void Model::LoadModel(const std::string &path) {
 }
 
 void Model::ProcessModel(aiNode *node, const aiScene *scene) {
+  auto trans = node->mTransformation;
+  glm::mat4 matModel = glm::mat4(trans.a1, trans.b1, trans.c1, trans.d1, //
+                                 trans.a2, trans.b2, trans.c2, trans.d2, //
+                                 trans.a3, trans.b3, trans.c3, trans.d3, //
+                                 trans.a4, trans.b4, trans.c4, trans.d4);
   for (unsigned int i = 0; i < node->mNumMeshes; ++i) {
     aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
-    m_Meshes.push_back(ProcessMesh(mesh, scene));
+    m_Meshes.push_back(ProcessMesh(mesh, scene, matModel));
   }
   for (unsigned int i = 0; i < node->mNumChildren; ++i) {
-    ProcessModel(node->mChildren[i], scene);
+    ProcessModel(node->mChildren[i], scene, matModel);
   }
 }
 
-Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene) {
+void Model::ProcessModel(aiNode *node, const aiScene *scene,
+                         glm::mat4 &transform) {
+  auto trans = node->mTransformation;
+
+  glm::mat4 matModel = glm::mat4(trans.a1, trans.b1, trans.c1, trans.d1, //
+                                 trans.a2, trans.b2, trans.c2, trans.d2, //
+                                 trans.a3, trans.b3, trans.c3, trans.d3, //
+                                 trans.a4, trans.b4, trans.c4, trans.d4);
+  matModel = transform * matModel;
+
+  for (unsigned int i = 0; i < node->mNumMeshes; ++i) {
+    aiMesh *mesh = scene->mMeshes[node->mMeshes[i]];
+    m_Meshes.push_back(ProcessMesh(mesh, scene, matModel));
+  }
+  for (unsigned int i = 0; i < node->mNumChildren; ++i) {
+    ProcessModel(node->mChildren[i], scene, matModel);
+  }
+}
+
+Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene, glm::mat4 &trans) {
   std::vector<Vertex> vertices;
   std::vector<unsigned int> indices;
   std::vector<Texture> textures;
@@ -103,7 +128,6 @@ Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene) {
 
     vertex.Position = glm::vec3{mesh->mVertices[i].x, mesh->mVertices[i].y,
                                 mesh->mVertices[i].z};
-
     vertex.Normal = glm::vec3{mesh->mNormals[i].x, mesh->mNormals[i].y,
                               mesh->mNormals[i].z};
 
@@ -126,28 +150,30 @@ Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene) {
 
   if (mesh->mMaterialIndex >= 0) {
     aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
-    // 1. diffuse maps
+
     std::vector<Texture> diffuseMaps = LoadMaterialTextures(
-        material, aiTextureType_DIFFUSE, "texture_diffuse");
+        scene, material, aiTextureType_DIFFUSE, "texture_diffuse");
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-    // 2. specular maps
+
     std::vector<Texture> specularMaps = LoadMaterialTextures(
-        material, aiTextureType_SPECULAR, "texture_specular");
+        scene, material, aiTextureType_SPECULAR, "texture_specular");
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-    // 3. normal maps
-    std::vector<Texture> normalMaps =
-        LoadMaterialTextures(material, aiTextureType_HEIGHT, "texture_normal");
+
+    std::vector<Texture> normalMaps = LoadMaterialTextures(
+        scene, material, aiTextureType_HEIGHT, "texture_normal");
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-    // 4. height maps
-    std::vector<Texture> heightMaps =
-        LoadMaterialTextures(material, aiTextureType_AMBIENT, "texture_height");
+
+    std::vector<Texture> heightMaps = LoadMaterialTextures(
+        scene, material, aiTextureType_AMBIENT, "texture_height");
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
   }
 
-  return Mesh(std::move(vertices), std::move(indices), std::move(textures));
+  return Mesh(std::move(vertices), std::move(indices), std::move(textures),
+              trans);
 }
 
-std::vector<Texture> Model::LoadMaterialTextures(aiMaterial *mat,
+std::vector<Texture> Model::LoadMaterialTextures(const aiScene *scene,
+                                                 aiMaterial *mat,
                                                  aiTextureType type,
                                                  std::string typeName) {
   std::vector<Texture> textures;
@@ -155,7 +181,11 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial *mat,
     aiString str;
     bool skip = false;
 
-    mat->GetTexture(type, i, &str);
+    aiReturn tex = mat->GetTexture(type, i, &str);
+    if (tex != AI_SUCCESS) {
+      continue;
+    }
+
     for (unsigned int j = 0; j < m_LoadedTextures.size(); ++j) {
       if (std::strcmp(m_LoadedTextures[j].Path.data(), str.C_Str()) == 0) {
         textures.push_back(m_LoadedTextures[j]);
@@ -165,9 +195,29 @@ std::vector<Texture> Model::LoadMaterialTextures(aiMaterial *mat,
     }
     if (!skip) {
       Texture texture;
-      texture.ID = TextureFromFile(str.C_Str(), m_Directory, false);
+
+      unsigned int ret =
+          TextureFromFile(&texture.ID, str.C_Str(), m_Directory, false);
+
+      if (ret == 0) {
+        std::string fullFilename =
+            scene->GetEmbeddedTexture(str.C_Str())->mFilename.C_Str();
+        fullFilename += '.';
+        fullFilename += scene->GetEmbeddedTexture(str.C_Str())->achFormatHint;
+
+        ret = TextureFromFile(&texture.ID, fullFilename.c_str(), m_Directory,
+                              false);
+
+        if (ret == 0) {
+          continue;
+        }
+
+        texture.Path = fullFilename.c_str();
+      } else {
+        texture.Path = str.C_Str();
+      }
+
       texture.Type = typeName;
-      texture.Path = str.C_Str();
       textures.push_back(texture);
       m_LoadedTextures.push_back(texture);
     }
