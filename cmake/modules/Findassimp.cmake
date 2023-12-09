@@ -45,15 +45,6 @@ if(WIN32)
 		)
 		
 		set(ASSIMP_LIBRARIES "ASSIMP_LIBRARY_RELEASE" "ASSIMP_LIBRARY_DEBUG")
-	
-		FUNCTION(ASSIMP_COPY_BINARIES TargetDirectory)
-			ADD_CUSTOM_TARGET(AssimpCopyBinaries
-				COMMAND ${CMAKE_COMMAND} -E copy ${ASSIMP_ROOT_DIR}/bin/assimp-vc${MSVC_TOOLSET_VERSION}-mtd.dll 	${TargetDirectory}/Debug/assimp-vc${MSVC_TOOLSET_VERSION}-mtd.dll
-				COMMAND ${CMAKE_COMMAND} -E copy ${ASSIMP_ROOT_DIR}/bin/assimp-vc${MSVC_TOOLSET_VERSION}-mt.dll 		${TargetDirectory}/Release/assimp-vc${MSVC_TOOLSET_VERSION}-mt.dll
-			COMMENT "Copying Assimp binaries to '${TargetDirectory}'"
-			VERBATIM)
-		ENDFUNCTION(ASSIMP_COPY_BINARIES)
-	
 	endif(MSVC_TOOLSET_VERSION)
 	
 else(WIN32)

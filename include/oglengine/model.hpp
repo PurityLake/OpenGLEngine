@@ -33,9 +33,9 @@ public:
   Mesh(std::vector<Vertex> &&vertices, std::vector<unsigned int> &&indices,
        std::vector<Texture> &&textures);
 
-private:
   unsigned int m_VAO, m_VBO, m_EBO;
 
+private:
   void Setup();
 };
 
@@ -43,6 +43,8 @@ struct Model {
 public:
   std::vector<Mesh> m_Meshes;
   Shader shader;
+
+  glm::mat3 m_ModelMat;
 
   Model(const char *path, Shader &shader);
 
