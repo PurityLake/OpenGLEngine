@@ -1,5 +1,5 @@
-#ifndef __SHADER_HPP__
-#define __SHADER_HPP__
+#ifndef __HPP_SHADER__
+#define __HPP_SHADER__
 
 #include <glad/glad.h>
 
@@ -75,4 +75,4 @@ private:
   unsigned int m_ID;
 };
 
-#endif // __SHADER_HPP__
+#endif // __HPP_SHADER__
