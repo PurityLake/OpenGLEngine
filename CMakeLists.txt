@@ -8,6 +8,7 @@ list(APPEND CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake/modules")
 
 find_package(GLFW3 REQUIRED)
 find_package(OpenGL REQUIRED)
+find_package(assimp REQUIRED)
 
 add_executable(game)
 add_library(oglengine STATIC)
@@ -20,11 +21,11 @@ endif()
 # Library options
 file(GLOB_RECURSE SRC_FILES "src/*.c*")
 target_sources(oglengine PRIVATE ${SRC_FILES})
-target_include_directories(oglengine PRIVATE "include" ${GLFW3_INCLUDE_DIR})
-target_link_libraries(oglengine PRIVATE ${GLFW3_LIBRARY} OpenGL::GL)
+target_include_directories(oglengine PRIVATE "include" ${ASSIMP_INCLUDE_DIR} ${GLFW3_INCLUDE_DIR})
+target_link_libraries(oglengine PRIVATE ${ASSIMP_LIBRARY_RELEASE} ${GLFW3_LIBRARY} OpenGL::GL)
 
 # Game options
 file(GLOB_RECURSE EXAMPLE_SRC_FILES "example/*.cpp")
 target_sources(game PRIVATE ${EXAMPLE_SRC_FILES})
-target_include_directories(game PRIVATE "include" ${GLFW3_INCLUDE_DIR})
-target_link_libraries(game PRIVATE ${GLFW3_LIBRARY} OpenGL::GL oglengine)
+target_include_directories(game PRIVATE "include" ${ASSIMP_INCLUDE_DIR} ${GLFW3_INCLUDE_DIR})
+target_link_libraries(game PRIVATE ${ASSIMP_LIBRARY_RELEASE} ${GLFW3_LIBRARY} OpenGL::GL oglengine)
