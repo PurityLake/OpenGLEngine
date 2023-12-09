@@ -15,7 +15,7 @@
   if (!((shaderOpt).has_value())) {                                            \
     errorCode;                                                                 \
   }                                                                            \
-  shader = (shaderOpt).value();
+  (shaderName) = (shaderOpt).value();
 
 class Shader;
 
