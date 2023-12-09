@@ -2,13 +2,10 @@
 
 void Renderer::Draw(const std::vector<Model> &models, glm::mat4 &view,
                     glm::mat4 &projection) const {
-  glm::mat4 matModel = glm::mat4(1.0f);
-  matModel = glm::translate(matModel, glm::vec3(0.0f, 0.0f, 0.0f));
-  matModel = glm::scale(matModel, glm::vec3(1.50, 1.0f, 1.0f));
   for (const auto &model : models) {
     for (const auto &mesh : model.m_Meshes) {
       model.m_Shader.Use();
-      model.m_Shader.SetMat4("model", matModel);
+      model.m_Shader.SetMat4("model", mesh.m_Tranform);
       model.m_Shader.SetMat4("view", view);
       model.m_Shader.SetMat4("projection", projection);
 
