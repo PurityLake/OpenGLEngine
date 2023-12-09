@@ -52,6 +52,14 @@
         "xtr1common": "cpp",
         "xutility": "cpp",
         "optional": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "cstdarg": "cpp",
+        "functional": "cpp",
+        "iomanip": "cpp",
+        "list": "cpp",
+        "unordered_map": "cpp",
+        "unordered_set": "cpp",
+        "vector": "cpp",
+        "xhash": "cpp"
     }
 }
