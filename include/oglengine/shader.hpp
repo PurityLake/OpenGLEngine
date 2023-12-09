@@ -7,6 +7,10 @@
 #include <string>
 #include <vector>
 
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
+
 #define UNWRAP_SHADER(shaderName, shaderOpt, errorCode)                        \
   if (!((shaderOpt).has_value())) {                                            \
     errorCode;                                                                 \
@@ -58,6 +62,9 @@ public:
   void SetInt(unsigned int location, int value) const;
   void SetFloat(const std::string &name, float value) const;
   void SetFloat(unsigned int location, float value) const;
+
+  void SetMat4(const std::string &name, const glm::mat4 &mat) const;
+  void SetMat4(unsigned int location, const glm::mat4 &mat) const;
 
   void SetVec4f(const std::string &name, float x, float y, float z,
                 float w) const;
