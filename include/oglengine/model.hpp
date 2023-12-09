@@ -1,5 +1,5 @@
-#ifndef __HPP_MESH__
-#define __HPP_MESH__
+#ifndef __HPP_MODEL__
+#define __HPP_MODEL__
 
 #include <string>
 #include <vector>
@@ -42,11 +42,14 @@ private:
 struct Model {
 public:
   std::vector<Mesh> m_Meshes;
-  Shader shader;
+  Shader m_Shader;
 
   glm::mat3 m_ModelMat;
 
   Model(const char *path, Shader &shader);
+  Model(const Model &other);
+  Model(Model &&other);
+  ~Model();
 
 private:
   std::vector<Texture> m_LoadedTextures;
@@ -59,4 +62,4 @@ private:
                                             std::string typeName);
 };
 
-#endif // __HPP_MESH__
+#endif // __HPP_MODEL__

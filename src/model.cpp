@@ -48,8 +48,25 @@ unsigned int TextureFromFile(const char *path, const std::string &directory,
   return textureID;
 }
 
-Model::Model(const char *path, Shader &shader) : shader(shader) {
+Model::Model(const char *path, Shader &shader) : m_Shader(shader) {
   LoadModel(path);
+}
+
+Model::Model(const Model &other) {
+  m_Meshes = other.m_Meshes;
+  m_Shader = other.m_Shader;
+  m_LoadedTextures = other.m_LoadedTextures;
+  m_Directory = other.m_Directory;
+}
+Model::Model(Model &&other) {
+  m_Meshes = other.m_Meshes;
+  m_Shader = other.m_Shader;
+  m_LoadedTextures = other.m_LoadedTextures;
+  m_Directory = other.m_Directory;
+}
+Model::~Model() {
+  m_Meshes.clear();
+  m_LoadedTextures.clear();
 }
 
 void Model::LoadModel(const std::string &path) {
