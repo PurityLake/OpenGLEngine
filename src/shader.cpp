@@ -7,7 +7,7 @@ Shader::Shader(unsigned int programID) : m_ID(programID) {}
 Shader::Shader(const Shader &other) : m_ID(other.m_ID) {}
 Shader::Shader(Shader &&other) : m_ID(other.m_ID) { other.m_ID = 0; }
 
-Shader::~Shader() { glDeleteProgram(m_ID); }
+Shader::~Shader() {}
 
 Shader &Shader::operator=(const Shader &other) {
   m_ID = other.m_ID;
