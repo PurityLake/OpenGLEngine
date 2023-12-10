@@ -109,6 +109,9 @@ void APIENTRY glDebugOutput(GLenum source, GLenum type, unsigned int id,
   std::cout << std::endl;
 }
 
+bool showLit = false;
+bool spacePressed = false;
+
 int main() {
   glfwInit();
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
@@ -153,21 +156,22 @@ int main() {
   stbi_set_flip_vertically_on_load(true);
 
   ShaderBuilder builder;
-  Shader shader;
+  Shader shaderLit, shaderUnlit;
   builder.AddShader(GL_VERTEX_SHADER, "assets/vert.glsl")
       .AddShader(GL_FRAGMENT_SHADER, "assets/frag.glsl");
-  UNWRAP_SHADER(shader, builder.Build(), return -1);
-
-  if (!shader.IsValid()) {
-    return -1;
-  }
+  UNWRAP_SHADER(shaderUnlit, builder.Build(), return -1);
   builder.Clear();
+  builder.AddShader(GL_VERTEX_SHADER, "assets/lightvert.glsl")
+      .AddShader(GL_FRAGMENT_SHADER, "assets/lightfrag.glsl");
+  UNWRAP_SHADER(shaderLit, builder.Build(), return -1);
 
-  Model model("assets/backpack.obj", shader);
+  Model modelLit("assets/backpack.obj", shaderLit);
+  Model modelUnlit("assets/backpack.obj", shaderUnlit);
 
   // view/projection transformations
 
-  std::vector<Model> models{model};
+  std::vector<Model> models{modelUnlit};
+  std::vector<Model> modelsLit{modelLit};
 
   Renderer renderer;
 
@@ -187,13 +191,18 @@ int main() {
                                             800.0f / 600.0f, 0.1f, 100.0f);
     glm::mat4 view = camera.GetViewMatrix();
 
-    renderer.Draw(models, view, projection);
+    if (showLit) {
+      renderer.Draw(models, view, projection);
+    } else {
+      renderer.Draw(modelsLit, view, projection);
+    }
 
     glfwSwapBuffers(window);
     glfwPollEvents();
   }
 
-  shader.Delete();
+  shaderLit.Delete();
+  shaderUnlit.Delete();
 
   if (window) {
     glfwDestroyWindow(window);
@@ -214,6 +223,13 @@ error:
 void processInput(GLFWwindow *window) {
   if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
     glfwSetWindowShouldClose(window, true);
+  }
+  if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS) {
+    spacePressed = true;
+  }
+  if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_RELEASE && spacePressed) {
+    showLit = !showLit;
+    spacePressed = false;
   }
   if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
     camera.ProcessKeyboard(FORWARD, deltaTime);
