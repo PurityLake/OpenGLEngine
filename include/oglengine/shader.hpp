@@ -60,16 +60,27 @@ public:
   void SetBool(unsigned int location, bool value) const;
   void SetInt(const std::string &name, int value) const;
   void SetInt(unsigned int location, int value) const;
-  void SetFloat(const std::string &name, float value) const;
-  void SetFloat(unsigned int location, float value) const;
 
   void SetMat4(const std::string &name, const glm::mat4 &mat) const;
   void SetMat4(unsigned int location, const glm::mat4 &mat) const;
 
-  void SetVec4f(const std::string &name, float x, float y, float z,
-                float w) const;
-  void SetVec4f(unsigned int location, float x, float y, float z,
-                float w) const;
+  void Set1f(const std::string &name, float value) const;
+  void Set1f(unsigned int location, float value) const;
+  void Set2f(const std::string &name, float x, float y) const;
+  void Set2f(unsigned int location, float x, float y) const;
+  void Set3f(const std::string &name, float x, float y, float z) const;
+  void Set3f(unsigned int location, float x, float y, float z) const;
+  void Set4f(const std::string &name, float x, float y, float z, float w) const;
+  void Set4f(unsigned int location, float x, float y, float z, float w) const;
+
+  void SetVec1f(const std::string &name, const glm::vec1 &vec) const;
+  void SetVec1f(unsigned int location, const glm::vec1 &vec) const;
+  void SetVec2f(const std::string &name, const glm::vec2 &vec) const;
+  void SetVec2f(unsigned int location, const glm::vec2 &vec) const;
+  void SetVec3f(const std::string &name, const glm::vec3 &vec) const;
+  void SetVec3f(unsigned int location, const glm::vec3 &vec) const;
+  void SetVec4f(const std::string &name, const glm::vec4 &vec) const;
+  void SetVec4f(unsigned int location, const glm::vec4 &vec) const;
 
 private:
   unsigned int m_ID;
