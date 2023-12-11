@@ -14,7 +14,7 @@ struct Light {
 
   Light(glm::vec3 position, glm::vec3 color, float ambientStrength);
 
-  void ApplyToShader(Shader &shaer) const;
+  void ApplyToShader(const Shader &shaer) const;
 };
 
 #endif // __HPP_LIGHT__
