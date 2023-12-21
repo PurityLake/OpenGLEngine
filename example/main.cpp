@@ -218,14 +218,6 @@ int main() {
   glfwTerminate();
 
   return 0;
-
-error:
-  if (window) {
-    glfwDestroyWindow(window);
-  }
-  glfwTerminate();
-
-  return -1;
 }
 
 void processInput(GLFWwindow *window) {
