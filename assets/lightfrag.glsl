@@ -7,12 +7,17 @@ in vec2 TexCoords;
 
 uniform sampler2D texture_diffuse1;
 
-vec3 lightColor = vec3(1.0, 1.0, 1.0);
+struct Light {
+  vec3 position;
+  vec3 color;
+  float ambientStrength;
+};
+
+uniform Light light;
 
 void main() {
-  float ambientStrength = 0.1;
-  vec3 ambient = ambientStrength * lightColor;
-  vec3 diffuse = max(dot(LightDir, Normal), 0.0) * lightColor;
+  vec3 ambient = light.color * light.ambientStrength;
+  vec3 diffuse = max(dot(LightDir, Normal), 0.0) * light.color;
   vec4 color = texture(texture_diffuse1, TexCoords);
   vec3 result = (ambient + diffuse);
   FragColor = color * vec4(result, 1.0);

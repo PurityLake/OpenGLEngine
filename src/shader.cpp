@@ -83,30 +83,26 @@ void Shader::Set4f(unsigned int location, float x, float y, float z,
 }
 
 void Shader::SetVec1f(const std::string &name, const glm::vec1 &vec) const {
-  glUniform1fv(glGetUniformLocation(m_ID, name.c_str()), vec.length(),
-               glm::value_ptr(vec));
+  glUniform1fv(glGetUniformLocation(m_ID, name.c_str()), 1, &vec[0]);
 }
 void Shader::SetVec1f(unsigned int location, const glm::vec1 &vec) const {
-  glUniform1fv(location, vec.length(), glm::value_ptr(vec));
+  glUniform1fv(location, 1, &vec[0]);
 }
 void Shader::SetVec2f(const std::string &name, const glm::vec2 &vec) const {
-  glUniform2fv(glGetUniformLocation(m_ID, name.c_str()), vec.length(),
-               glm::value_ptr(vec));
+  glUniform2fv(glGetUniformLocation(m_ID, name.c_str()), 1, &vec[0]);
 }
 void Shader::SetVec2f(unsigned int location, const glm::vec2 &vec) const {
-  glUniform2fv(location, vec.length(), glm::value_ptr(vec));
+  glUniform2fv(location, 1, &vec[0]);
 }
 void Shader::SetVec3f(const std::string &name, const glm::vec3 &vec) const {
-  glUniform3fv(glGetUniformLocation(m_ID, name.c_str()), vec.length(),
-               glm::value_ptr(vec));
+  glUniform3fv(glGetUniformLocation(m_ID, name.c_str()), 1, &vec[0]);
 }
 void Shader::SetVec3f(unsigned int location, const glm::vec3 &vec) const {
-  glUniform3fv(location, vec.length(), glm::value_ptr(vec));
+  glUniform3fv(location, 1, &vec[0]);
 }
 void Shader::SetVec4f(const std::string &name, const glm::vec4 &vec) const {
-  glUniform4fv(glGetUniformLocation(m_ID, name.c_str()), vec.length(),
-               glm::value_ptr(vec));
+  glUniform4fv(glGetUniformLocation(m_ID, name.c_str()), 1, &vec[0]);
 }
 void Shader::SetVec4f(unsigned int location, const glm::vec4 &vec) const {
-  glUniform4fv(location, vec.length(), glm::value_ptr(vec));
+  glUniform4fv(location, 1, &vec[0]);
 }

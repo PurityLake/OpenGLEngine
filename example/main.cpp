@@ -177,6 +177,8 @@ int main() {
 
   glEnable(GL_DEPTH_TEST);
 
+  Light light(glm::vec3(0.0f, 5.0f, -5.0f), glm::vec3(1.0f), 0.1f);
+
   while (!glfwWindowShouldClose(window)) {
     float currentFrame = static_cast<float>(glfwGetTime());
     deltaTime = currentFrame - lastFrame;
@@ -191,10 +193,16 @@ int main() {
                                             800.0f / 600.0f, 0.1f, 100.0f);
     glm::mat4 view = camera.GetViewMatrix();
 
+    glm::mat4 lightModel = glm::rotate(
+        glm::mat4(1.0f), (float)glm::radians(glfwGetTime()) / 100.0f,
+        glm::vec3(0.0f, 1.0f, 0.0f));
+
+    light.position = lightModel * glm::vec4(light.position, 1.0f);
+
     if (showLit) {
-      renderer.Draw(models, view, projection);
+      renderer.Draw(models, view, projection, light);
     } else {
-      renderer.Draw(modelsLit, view, projection);
+      renderer.Draw(modelsLit, view, projection, light);
     }
 
     glfwSwapBuffers(window);

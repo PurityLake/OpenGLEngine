@@ -12,12 +12,18 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 
-vec3 lightPos = vec3(0.0, 5.0, -5.0);
+struct Light {
+  vec3 position;
+  vec3 color;
+  float ambientStrength;
+};
+
+uniform Light light;
 
 void main() {
   TexCoords = aTexCoords;
   Normal = aNormal;
   FragPos = (model * vec4(aPos, 1.0)).xyz;
-  LightDir = normalize(FragPos - lightPos);
+  LightDir = normalize(FragPos - light.position);
   gl_Position = projection * view * model * vec4(aPos, 1.0);
 }

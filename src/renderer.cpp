@@ -1,7 +1,7 @@
 #include "oglengine/renderer.hpp"
 
 void Renderer::Draw(const std::vector<Model> &models, glm::mat4 &view,
-                    glm::mat4 &projection) const {
+                    glm::mat4 &projection, const Light &light) const {
   for (const auto &model : models) {
     for (const auto &mesh : model.m_Meshes) {
       model.m_Shader.Use();
@@ -31,6 +31,7 @@ void Renderer::Draw(const std::vector<Model> &models, glm::mat4 &view,
         }
         model.m_Shader.SetInt((name + number).c_str(), i);
       }
+      light.ApplyToShader(model.m_Shader);
       glBindVertexArray(mesh.m_VAO);
       glDrawElements(GL_TRIANGLES, mesh.m_Indices.size(), GL_UNSIGNED_INT, 0);
       glBindVertexArray(0);
