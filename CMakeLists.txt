@@ -37,13 +37,13 @@ endif()
 # Library options
 file(GLOB_RECURSE SRC_FILES "src/*.c*")
 target_sources(oglengine PRIVATE ${SRC_FILES})
-target_include_directories(oglengine PRIVATE "include" ${ASSIMP_INCLUDE_DIR} ${GLFW3_INCLUDE_DIR})
+target_include_directories(oglengine PRIVATE "include" "3rdparty/include" ${ASSIMP_INCLUDE_DIR} ${GLFW3_INCLUDE_DIR})
 target_link_libraries(oglengine PRIVATE ${assimp_lib} ${GLFW3_LIBRARY} OpenGL::GL)
 
 # Game options
 file(GLOB_RECURSE EXAMPLE_SRC_FILES "example/*.cpp")
 target_sources(game PRIVATE ${EXAMPLE_SRC_FILES})
-target_include_directories(game PRIVATE "include" ${ASSIMP_INCLUDE_DIR} ${GLFW3_INCLUDE_DIR})
+target_include_directories(game PRIVATE "include" "3rdparty/include" ${ASSIMP_INCLUDE_DIR} ${GLFW3_INCLUDE_DIR})
 target_link_libraries(game PRIVATE ${assimp_lib} ${GLFW3_LIBRARY} OpenGL::GL oglengine)
 
 if(WIN32)
