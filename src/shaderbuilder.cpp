@@ -41,7 +41,7 @@ std::optional<Shader> ShaderBuilder::Build() {
   std::vector<unsigned int> shaders;
   std::string shaderCode;
   std::ifstream file;
-  file.exceptions(std::ifstream::failbit || std::ifstream::badbit);
+  file.exceptions(std::ifstream::failbit | std::ifstream::badbit);
   for (const ShaderEntry &entry : m_ShaderEntries) {
     try {
       std::stringstream stream;
