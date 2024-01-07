@@ -3,7 +3,7 @@
 #include <glad/glad.h>
 
 #define STB_IMAGE_IMPLEMENTATION
-#include <oglengine/stb_image.h>
+#include <stb_image.h>
 
 #include <iostream>
 

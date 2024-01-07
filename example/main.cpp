@@ -1,12 +1,12 @@
 #include <glad/glad.h>
 
 #include <GLFW/glfw3.h>
+#include <stb_image.h>
 
 #include <oglengine/camera.hpp>
 #include <oglengine/model.hpp>
 #include <oglengine/renderer.hpp>
 #include <oglengine/shader.hpp>
-#include <oglengine/stb_image.h>
 
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
@@ -193,9 +193,9 @@ int main() {
                                             800.0f / 600.0f, 0.1f, 100.0f);
     glm::mat4 view = camera.GetViewMatrix();
 
-    glm::mat4 lightModel = glm::rotate(
-        glm::mat4(1.0f), (float)glm::radians(glfwGetTime()) / 100.0f,
-        glm::vec3(0.0f, 1.0f, 0.0f));
+    glm::mat4 lightModel =
+        glm::rotate(glm::mat4(1.0f), (float)glm::radians(glfwGetTime()) / 25.0f,
+                    glm::vec3(1.0f, 0.0f, 0.0f));
 
     light.position = lightModel * glm::vec4(light.position, 1.0f);
 
