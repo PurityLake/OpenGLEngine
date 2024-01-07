@@ -45,14 +45,15 @@ public:
   std::vector<Mesh> m_Meshes;
   Shader m_Shader;
 
-  Model(const char *path, Shader &shader);
+  Model(const std::string &path, const std::string &textureShader,
+        Shader &shader);
   Model(const Model &other);
   Model(Model &&other);
   ~Model();
 
 private:
+  const std::string m_TexturePath;
   std::vector<Texture> m_LoadedTextures;
-  std::string m_Directory;
 
   void LoadModel(const std::string &path);
   void ProcessModel(aiNode *node, const aiScene *scene);
@@ -60,7 +61,8 @@ private:
   Mesh ProcessMesh(aiMesh *mesh, const aiScene *scene, glm::mat4 &trans);
   std::vector<Texture> LoadMaterialTextures(const aiScene *scene,
                                             aiMaterial *mat, aiTextureType type,
-                                            std::string typeName);
+                                            const std::string &typeName,
+                                            const std::string &texturePath);
 };
 
 #endif // __HPP_MODEL__

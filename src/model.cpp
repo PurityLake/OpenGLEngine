@@ -49,7 +49,9 @@ unsigned int TextureFromFile(unsigned int *id, const char *path,
   return textureID;
 }
 
-Model::Model(const char *path, Shader &shader) : m_Shader(shader) {
+Model::Model(const std::string &path, const std::string &texturePath,
+             Shader &shader)
+    : m_TexturePath(texturePath), m_Shader(shader) {
   LoadModel(path);
 }
 
@@ -57,13 +59,11 @@ Model::Model(const Model &other) {
   m_Meshes = other.m_Meshes;
   m_Shader = other.m_Shader;
   m_LoadedTextures = other.m_LoadedTextures;
-  m_Directory = other.m_Directory;
 }
 Model::Model(Model &&other) {
   m_Meshes = other.m_Meshes;
   m_Shader = other.m_Shader;
   m_LoadedTextures = other.m_LoadedTextures;
-  m_Directory = other.m_Directory;
 }
 Model::~Model() {
   m_Meshes.clear();
@@ -71,7 +71,6 @@ Model::~Model() {
 }
 
 void Model::LoadModel(const std::string &path) {
-
   Assimp::Importer importer;
   const aiScene *scene = importer.ReadFile(
       path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals);
@@ -79,7 +78,6 @@ void Model::LoadModel(const std::string &path) {
   if (!scene | scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
     std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
   }
-  m_Directory = path.substr(0, path.find_last_of('/'));
 
   ProcessModel(scene->mRootNode, scene);
 }
@@ -151,20 +149,23 @@ Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene, glm::mat4 &trans) {
   if (mesh->mMaterialIndex >= 0) {
     aiMaterial *material = scene->mMaterials[mesh->mMaterialIndex];
 
-    std::vector<Texture> diffuseMaps = LoadMaterialTextures(
-        scene, material, aiTextureType_DIFFUSE, "texture_diffuse");
+    std::vector<Texture> diffuseMaps =
+        LoadMaterialTextures(scene, material, aiTextureType_DIFFUSE,
+                             "texture_diffuse", m_TexturePath);
     textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
 
-    std::vector<Texture> specularMaps = LoadMaterialTextures(
-        scene, material, aiTextureType_SPECULAR, "texture_specular");
+    std::vector<Texture> specularMaps =
+        LoadMaterialTextures(scene, material, aiTextureType_SPECULAR,
+                             "texture_specular", m_TexturePath);
     textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
 
     std::vector<Texture> normalMaps = LoadMaterialTextures(
-        scene, material, aiTextureType_HEIGHT, "texture_normal");
+        scene, material, aiTextureType_HEIGHT, "texture_normal", m_TexturePath);
     textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
 
-    std::vector<Texture> heightMaps = LoadMaterialTextures(
-        scene, material, aiTextureType_AMBIENT, "texture_height");
+    std::vector<Texture> heightMaps =
+        LoadMaterialTextures(scene, material, aiTextureType_AMBIENT,
+                             "texture_height", m_TexturePath);
     textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
   }
 
@@ -172,10 +173,10 @@ Mesh Model::ProcessMesh(aiMesh *mesh, const aiScene *scene, glm::mat4 &trans) {
               trans);
 }
 
-std::vector<Texture> Model::LoadMaterialTextures(const aiScene *scene,
-                                                 aiMaterial *mat,
-                                                 aiTextureType type,
-                                                 std::string typeName) {
+std::vector<Texture>
+Model::LoadMaterialTextures(const aiScene *scene, aiMaterial *mat,
+                            aiTextureType type, const std::string &typeName,
+                            const std::string &texturePath) {
   std::vector<Texture> textures;
   for (unsigned int i = 0; i < mat->GetTextureCount(type); ++i) {
     aiString str;
@@ -197,7 +198,7 @@ std::vector<Texture> Model::LoadMaterialTextures(const aiScene *scene,
       Texture texture;
 
       unsigned int ret =
-          TextureFromFile(&texture.ID, str.C_Str(), m_Directory, false);
+          TextureFromFile(&texture.ID, str.C_Str(), m_TexturePath, false);
 
       if (ret == 0) {
         std::string fullFilename =
@@ -205,7 +206,7 @@ std::vector<Texture> Model::LoadMaterialTextures(const aiScene *scene,
         fullFilename += '.';
         fullFilename += scene->GetEmbeddedTexture(str.C_Str())->achFormatHint;
 
-        ret = TextureFromFile(&texture.ID, fullFilename.c_str(), m_Directory,
+        ret = TextureFromFile(&texture.ID, fullFilename.c_str(), m_TexturePath,
                               false);
 
         if (ret == 0) {

@@ -157,16 +157,17 @@ int main() {
 
   ShaderBuilder builder;
   Shader shaderLit, shaderUnlit;
-  builder.AddShader(GL_VERTEX_SHADER, "assets/vert.glsl")
-      .AddShader(GL_FRAGMENT_SHADER, "assets/frag.glsl");
+  builder.AddShader(GL_VERTEX_SHADER, "assets/shaders/vert.glsl")
+      .AddShader(GL_FRAGMENT_SHADER, "assets/shaders/frag.glsl");
   UNWRAP_SHADER(shaderUnlit, builder.Build(), return -1);
   builder.Clear();
-  builder.AddShader(GL_VERTEX_SHADER, "assets/lightvert.glsl")
-      .AddShader(GL_FRAGMENT_SHADER, "assets/lightfrag.glsl");
+  builder.AddShader(GL_VERTEX_SHADER, "assets/shaders/lightvert.glsl")
+      .AddShader(GL_FRAGMENT_SHADER, "assets/shaders/lightfrag.glsl");
   UNWRAP_SHADER(shaderLit, builder.Build(), return -1);
 
-  Model modelLit("assets/backpack.obj", shaderLit);
-  Model modelUnlit("assets/backpack.obj", shaderUnlit);
+  Model modelLit("assets/models/backpack.obj", "assets/textures/", shaderLit);
+  Model modelUnlit("assets/models/backpack.obj", "assets/textures/",
+                   shaderUnlit);
 
   // view/projection transformations
 
