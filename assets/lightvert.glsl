@@ -22,8 +22,8 @@ uniform Light light;
 
 void main() {
   TexCoords = aTexCoords;
-  Normal = aNormal;
-  FragPos = (model * vec4(aPos, 1.0)).xyz;
+  Normal = mat3(transpose(inverse(model))) * aNormal;
+  FragPos = vec3(model * vec4(aPos, 1.0));
   LightDir = normalize(FragPos - light.position);
   gl_Position = projection * view * model * vec4(aPos, 1.0);
 }
