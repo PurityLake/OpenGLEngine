@@ -200,9 +200,9 @@ int main() {
     light.position = lightModel * glm::vec4(light.position, 1.0f);
 
     if (showLit) {
-      renderer.Draw(models, view, projection, light);
+      renderer.Draw(camera, models, view, projection, light);
     } else {
-      renderer.Draw(modelsLit, view, projection, light);
+      renderer.Draw(camera, modelsLit, view, projection, light);
     }
 
     glfwSwapBuffers(window);

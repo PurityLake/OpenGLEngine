@@ -1,13 +1,15 @@
 #include "oglengine/renderer.hpp"
 
-void Renderer::Draw(const std::vector<Model> &models, glm::mat4 &view,
-                    glm::mat4 &projection, const Light &light) const {
+void Renderer::Draw(const Camera &camera, const std::vector<Model> &models,
+                    glm::mat4 &view, glm::mat4 &projection,
+                    const Light &light) const {
   for (const auto &model : models) {
     for (const auto &mesh : model.m_Meshes) {
       model.m_Shader.Use();
       model.m_Shader.SetMat4("model", mesh.m_Tranform);
       model.m_Shader.SetMat4("view", view);
       model.m_Shader.SetMat4("projection", projection);
+      model.m_Shader.SetVec3f("viewPos", camera.Position);
 
       unsigned int diffuseNr = 1;
       unsigned int specularNr = 1;
