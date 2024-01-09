@@ -1,3 +1,5 @@
+// Copyright © 2024 Robert O'Shea
+
 #ifndef CAMERA_H
 #define CAMERA_H
 

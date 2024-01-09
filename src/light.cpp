@@ -1,3 +1,5 @@
+// Copyright © 2024 Robert O'Shea
+
 #include "oglengine/light.hpp"
 
 Light::Light(glm::vec3 position, glm::vec3 color, float ambientStrength)

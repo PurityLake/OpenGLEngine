@@ -1,3 +1,5 @@
+// Copyright © 2024 Robert O'Shea
+
 #include "oglengine/renderer.hpp"
 
 void Renderer::Draw(const Camera &camera, const std::vector<Model> &models,

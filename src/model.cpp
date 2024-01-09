@@ -1,3 +1,5 @@
+// Copyright © 2024 Robert O'Shea
+
 #include "oglengine/model.hpp"
 
 #include <glad/glad.h>
@@ -18,34 +20,34 @@ unsigned int TextureFromFile(unsigned int *id, const char *path,
   int width, height, nrComponents;
   unsigned char *data =
       stbi_load(filename.c_str(), &width, &height, &nrComponents, 0);
-  if (data) {
-    GLenum format;
-    if (nrComponents == 1) {
-      format = GL_RED;
-    } else if (nrComponents == 3) {
-      format = GL_RGB;
-    } else if (nrComponents == 4) {
-      format = GL_RGBA;
-    }
-
-    glBindTexture(GL_TEXTURE_2D, textureID);
-    glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format,
-                 GL_UNSIGNED_BYTE, data);
-    glGenerateMipmap(GL_TEXTURE_2D);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
-                    GL_LINEAR_MIPMAP_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    *id = textureID;
-    stbi_image_free(data);
-  } else {
+  if (!data) {
     std::cout << "Texture failed to load at path: " << path << std::endl;
     stbi_image_free(data);
     glDeleteTextures(1, &textureID);
     return 0;
   }
+  GLenum format;
+  if (nrComponents == 1) {
+    format = GL_RED;
+  } else if (nrComponents == 3) {
+    format = GL_RGB;
+  } else {
+    format = GL_RGBA;
+  }
+
+  glBindTexture(GL_TEXTURE_2D, textureID);
+  glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format,
+               GL_UNSIGNED_BYTE, data);
+  glGenerateMipmap(GL_TEXTURE_2D);
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+                  GL_LINEAR_MIPMAP_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  *id = textureID;
+  stbi_image_free(data);
+
   return textureID;
 }
 
@@ -75,7 +77,8 @@ void Model::LoadModel(const std::string &path) {
   const aiScene *scene = importer.ReadFile(
       path, aiProcess_Triangulate | aiProcess_FlipUVs | aiProcess_GenNormals);
 
-  if (!scene | scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+  if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE ||
+      !scene->mRootNode) {
     std::cout << "ERROR::ASSIMP::" << importer.GetErrorString() << std::endl;
   }
 

@@ -1,3 +1,5 @@
+// Copyright © 2024 Robert O'Shea
+
 #include "oglengine/shader.hpp"
 
 #include <fstream>

@@ -1,3 +1,5 @@
+// Copyright © 2024 Robert O'Shea
+
 #ifndef __HPP_MODEL__
 #define __HPP_MODEL__
 

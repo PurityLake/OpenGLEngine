@@ -1,3 +1,5 @@
+// Copyright © 2024 Robert O'Shea
+
 #ifndef __HPP_SHADER__
 #define __HPP_SHADER__
 

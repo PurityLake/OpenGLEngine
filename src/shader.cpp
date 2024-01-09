@@ -1,6 +1,6 @@
-#include "oglengine/shader.hpp"
+// Copyright © 2024 Robert O'Shea
 
-#include <iostream>
+#include "oglengine/shader.hpp"
 
 Shader::Shader() : m_ID(0) {}
 Shader::Shader(unsigned int programID) : m_ID(programID) {}
