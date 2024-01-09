@@ -15,6 +15,7 @@ struct Light {
   float ambientStrength;
 
   Light(glm::vec3 position, glm::vec3 color, float ambientStrength);
+  Light(const Light &other);
 
   void ApplyToShader(const Shader &shaer) const;
 };
