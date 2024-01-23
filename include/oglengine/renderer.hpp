@@ -7,7 +7,6 @@
 #include <oglengine/light.hpp>
 #include <oglengine/model.hpp>
 
-#include <iostream>
 #include <vector>
 
 class Renderer {
